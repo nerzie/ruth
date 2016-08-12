@@ -20,7 +20,7 @@ def make_timestamp():
     return dt.strftime('%Y/%m/%d @ %H:%M:%S')
 
 
-def write_to_file(data, timestamp, md5_hash, filename='ruthbook.txt'):
+def write_to_file(data, timestamp, md5_hash, filename):
     with open(filename, "a") as out:
         out.write('\n')
         out.write(md5_hash)
@@ -31,22 +31,24 @@ def write_to_file(data, timestamp, md5_hash, filename='ruthbook.txt'):
             out.write(line)
 
 
-def save_text(text):
+def save_text(text, filename):
     timestamp = make_timestamp()
     md5_hash = get_md5_hash(text)[0:7]
-    write_to_file(text, timestamp, md5_hash)
+    write_to_file(text, timestamp, md5_hash, filename)
 
 
 def main():
     parser = argparse.ArgumentParser(description="Program to write some random notes.")
     parser.add_argument("-f", "--file", help="Filename to write")
-    args = parser.parse_args()
+    filename = parser.parse_args().file
+    if filename == None:
+        filename='ruthbook.txt'
     print('Welcome to Ruthbook! Press ctrl+c to save and exit.')
     while True:
         try:
             text.append(input('>>> '))
         except KeyboardInterrupt:
-            save_text(text)
+            save_text(text, filename)
             print('Bye!')
             sys.exit()
 
